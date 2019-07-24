@@ -8,7 +8,7 @@ order_no = 1
 ## HTML을 주는 부분
 @app.route('/')
 def home():
-    return 'This is Home!'
+    return render_template('index.html')
 
 ## API 역할을 하는 부분
 @app.route('/order', methods=['POST'])
@@ -21,7 +21,7 @@ def post():
     address_receive = request.form['address_give']  # 클라이언트로부터 주소를 받는 부분
     phone_receive = request.form['phone_give']  # 클라이언트로부터 폰번호를 받는 부분
 
-    order = {'name':name_receive,'number':number_receive, 'address': address_receive, 'phone number': phone_receive, 'no': order_no} # 받은 걸 딕셔너리로 만들고,
+    order = {'name':name_receive,'number':number_receive, 'address': address_receive, 'phone_number': phone_receive, 'no': order_no} # 받은 걸 딕셔너리로 만들고,
     orders.append(order)   # 넣는다
     order_no += 1
     return jsonify({'result':'success'})
@@ -42,6 +42,10 @@ def view():
     if not orders:
         return jsonify({'result': 'fail', 'msg': '주문이 없습니다.'})
     return jsonify({'result':'success', 'orders':orders})
+
+@app.route('/order_list')
+def order_list():
+    return render_template('order_list.html')
 
 if __name__ == '__main__':
     app.run('0.0.0.0',port=5000,debug=True)
