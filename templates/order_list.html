@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/order_list.css') }}">
+
+    <script>
+      function get_order(){
+        $.ajax({
+          type: "GET",
+          url: "/order",
+          data: {},
+          success: function(result){
+            if (result['orders'] == null){
+              alert('주문내역이 없어용ㅠㅠ');
+              location.href="/";
+            } else {
+              var order_list = result['orders']
+              for (let i = 0; i < order_list.length; i++){
+                var no = order_list[i]['no'];
+                var name = order_list[i]['name'];
+                var number = order_list[i]['number'];
+                var address = order_list[i]['address'];
+                var phone_number = order_list[i]['phone_number'];
+
+                add_list(no, name, number, address, phone_number)
+              }
+            }
+          }
+        })
+      }
+
+      function add_list(no, name, number, address, phone_number){
+        var order_table = '<tr>\
+              <th scope="row">'+no+'</th>\
+              <td>'+name+'</td>\
+              <td>'+number+'</td>\
+              <td>'+address+'</td>\
+              <td>'+phone_number+'</td>\
+            </tr>';
+
+        $('#order_table').append(order_table)
+      }
+      
+    </script>
+
+    <title>[과제] 주문 확인</title>
+
+  </head>
+  <body>
+    <!-- 주문 리스트 -->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">이름</th>
+          <th scope="col">수량</th>
+          <th scope="col">주소</th>
+          <th scope="col">전화번호</th>
+        </tr>
+      </thead>
+      <tbody id="order_table">
+      </tbody>
+    </table>
+    <script>
+      $('document').ready(function() {
+        get_order()
+      });
+    </script>
+  </body>
+</html>
